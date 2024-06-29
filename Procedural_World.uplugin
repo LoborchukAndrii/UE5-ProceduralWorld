@@ -1,0 +1,24 @@
+﻿{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Procedural_World",
+	"Description": "",
+	"Category": "ProceduralWorld",
+	"CreatedBy": "Andrii Loborchuk",
+	"CreatedByURL": "https://github.com/LoborchukAndrii",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "https://github.com/LoborchukAndrii",
+	"CanContainContent": true,
+	"IsBetaVersion": true,
+	"IsExperimentalVersion": true,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "Procedural_World",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
