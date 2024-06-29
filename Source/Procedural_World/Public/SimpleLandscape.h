@@ -16,15 +16,14 @@ struct FChunkInfo
 	FChunkInfo(){}
 	FChunkInfo(int Index, const TArray<FVector>& Vertices, const TArray<int32>& Triangles,
 		const TArray<FVector>& Normals, const TArray<FVector2D>& UV0, const TArray<FLinearColor>& VertexColors,
-		const TArray<FProcMeshTangent>& Tangents, bool IsForCreation)
+		const TArray<FProcMeshTangent>& Tangents)
 		: Index(Index),
 		  Vertices(Vertices),
 		  Triangles(Triangles),
 		  Normals(Normals),
 		  UV0(UV0),
 		  VertexColors(VertexColors),
-		  Tangents(Tangents),
-	      IsForCreation(IsForCreation)
+		  Tangents(Tangents)
 	{
 	}
 
@@ -37,7 +36,6 @@ struct FChunkInfo
 	TArray<FVector2D> UV0;
 	TArray<FLinearColor> VertexColors; 
 	TArray<FProcMeshTangent> Tangents;
-	bool IsForCreation;
 	
 };
 

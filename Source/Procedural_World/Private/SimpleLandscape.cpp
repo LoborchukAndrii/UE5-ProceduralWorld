@@ -89,7 +89,7 @@ void ASimpleLandscape::GenerateLandscapeInfoByPlayer(FVector& TargetLocation, in
 	TArray<FProcMeshTangent> Tangents;
 	UKismetProceduralMeshLibrary::CalculateTangentsForMesh(Vertices, Triangles, UV0, Normals, Tangents);
 	TArray<FLinearColor> VertexColors = {FColor::Black};
-	FChunkInfo Chunk = FChunkInfo(Index, Vertices, Triangles, Normals, UV0, VertexColors, Tangents, true);
+	FChunkInfo Chunk = FChunkInfo(Index, Vertices, Triangles, Normals, UV0, VertexColors, Tangents);
 
 	GenerateChunks.Enqueue(MoveTemp(Chunk));
 }
@@ -249,20 +249,10 @@ uint32 FSimpleProcLandscapeThread::Run() {
 		{
 			FChunkInfo NewChunk;
 			Landscape->GenerateChunks.Dequeue(NewChunk);
-			if (NewChunk.IsForCreation)
+			AsyncTask(ENamedThreads::GameThread, [this, NewChunk]()
 			{
-				AsyncTask(ENamedThreads::GameThread, [this, NewChunk]()
-				{
-					Landscape->CreateLandscapeSection(const_cast<FChunkInfo&>(NewChunk));
-				});
-			}
-			else
-			{
-				AsyncTask(ENamedThreads::GameThread, [this, NewChunk]()
-				{
-					Landscape->UpdateLandscapeSection(const_cast<FChunkInfo&>(NewChunk));
-				});
-			}
+				Landscape->CreateLandscapeSection(const_cast<FChunkInfo&>(NewChunk));
+			});
 		}
 		Event->Wait();
 	}
