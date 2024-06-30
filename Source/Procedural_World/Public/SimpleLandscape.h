@@ -78,8 +78,6 @@ public:
 
 	void GenerateLandscapeInfoByPlayer(FVector& TargetLocation, int Index);
 
-	void UpdateLandscapeInfoByPlayer(FVector& TargetLocation, int Index);
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Seed;
 
@@ -93,8 +91,6 @@ public:
 	FRunnableThread* Thread;
 
 	void CreateLandscapeSection(FChunkInfo& Chunk);
-
-	void UpdateLandscapeSection(FChunkInfo& Chunk);
 
 	UPROPERTY(EditAnywhere)
 	int ChunksAroundPlayer;

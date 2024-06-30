@@ -94,60 +94,12 @@ void ASimpleLandscape::GenerateLandscapeInfoByPlayer(FVector& TargetLocation, in
 	GenerateChunks.Enqueue(MoveTemp(Chunk));
 }
 
-void ASimpleLandscape::UpdateLandscapeInfoByPlayer(FVector& TargetLocation, int Index)
-{
-	TArray<FVector> Vertices;
-	TArray<FVector2D> UV0;
-	
-	for (int i = 0; i < ChunkSize; ++i)
-	{
-		for (int t = 0; t < ChunkSize; ++t)
-		{
-			float XLocation = i * VertexDistance + TargetLocation.X;
-			float YLocation = t * VertexDistance + TargetLocation.Y;
-			
-			Vertices.Add(FVector(XLocation, YLocation, GenerateHeight(XLocation + Seed, YLocation + Seed)));
-			UV0.Add(FVector2D(i, t));
-		}
-	}
-	
-	TArray<int> Triangles;
-	for (int i = 0; i < ChunkSize - 1; ++i)
-	{
-		for (int t = 0; t < ChunkSize - 1; ++t)
-		{
-			Triangles.Add(i * ChunkSize + t);
-			Triangles.Add(i * ChunkSize + t + 1);
-			Triangles.Add((i + 1) * ChunkSize + t );
-			Triangles.Add((i + 1) * ChunkSize + t );
-			Triangles.Add(i * ChunkSize + t + 1);
-			Triangles.Add((i + 1) * ChunkSize + t + 1);
-		}
-	}
-	
-	TArray<FVector> Normals;
-	TArray<FProcMeshTangent> Tangents;
-	UKismetProceduralMeshLibrary::CalculateTangentsForMesh(Vertices, Triangles, UV0, Normals, Tangents);
-	TArray<FLinearColor> VertexColors = {FColor::Black};
-	FChunkInfo Chunk = FChunkInfo(Index, Vertices, Triangles, Normals, UV0, VertexColors, Tangents, false);
-
-	GenerateChunks.Enqueue(MoveTemp(Chunk));	
-}
-
 void ASimpleLandscape::CreateLandscapeSection(FChunkInfo& Chunk)
 {
 	if (ProceduralMesh)
 	{
 		ProceduralMesh->CreateMeshSection_LinearColor(Chunk.Index, Chunk.Vertices, Chunk.Triangles, Chunk.Normals, Chunk.UV0, Chunk.UV0, Chunk.UV0, Chunk.UV0, Chunk.VertexColors, Chunk.Tangents, true);
 		ProceduralMesh->SetMaterial(Chunk.Index, LandscapeMaterial);
-	}
-}
-
-void ASimpleLandscape::UpdateLandscapeSection(FChunkInfo& Chunk)
-{
-	if (ProceduralMesh)
-	{
-		ProceduralMesh->UpdateMeshSection_LinearColor(Chunk.Index, Chunk.Vertices, Chunk.Normals, Chunk.UV0, Chunk.UV0, Chunk.UV0, Chunk.UV0, Chunk.VertexColors, Chunk.Tangents, true);
 	}
 }
 
@@ -239,7 +191,7 @@ uint32 FSimpleProcLandscapeThread::Run() {
 												
 					if (IsNeedToUpdate)
 					{
-						Landscape->UpdateLandscapeInfoByPlayer(NewLocation, Index);
+						Landscape->GenerateLandscapeInfoByPlayer(NewLocation, Index);
 					}
 				}
 			});
